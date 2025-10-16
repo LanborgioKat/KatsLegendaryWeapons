@@ -3,7 +3,10 @@ package com.thorildsby.katslegendaryweapons.item;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -24,8 +27,12 @@ public abstract class Item implements Listener {
         this.material = material;
     }
 
-    protected boolean isApplicable(PlayerInteractEvent event) {
+    protected boolean isApplicable(PlayerEvent event) {
         return isApplicable(event.getPlayer().getInventory().getItemInMainHand());
+    }
+
+    protected boolean isApplicable(EntityEvent event) {
+        return event.getEntity() instanceof Player player && isApplicable(player.getInventory().getItemInMainHand());
     }
 
     public boolean isApplicable(@NotNull ItemStack itemStack) {
@@ -40,7 +47,7 @@ public abstract class Item implements Listener {
         return itemID.equals(pdcID);
     }
 
-    public ItemStack getItem() {
+    public final ItemStack getItem() {
         ItemStack itemStack = new ItemStack(material);
         ItemMeta meta = itemStack.getItemMeta();
         assert meta != null;
@@ -49,6 +56,8 @@ public abstract class Item implements Listener {
         pdc.set(new NamespacedKey(plugin, "ITEM_ID"), PersistentDataType.STRING, itemID);
 
         itemStack.setItemMeta(meta);
+
+        itemStack = generateItem(itemStack);
         return itemStack;
     }
 

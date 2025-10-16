@@ -15,6 +15,7 @@ public class LegendariesCommand implements CommandExecutor {
             ItemStack item = ITEM_MANAGER.getHandler(args[0]).getItem();
             if (item == null) return false;
             player.getInventory().addItem(item);
+            return true;
         }
 
         return false;

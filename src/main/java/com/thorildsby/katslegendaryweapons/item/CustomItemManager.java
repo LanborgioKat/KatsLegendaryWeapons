@@ -1,7 +1,6 @@
 package com.thorildsby.katslegendaryweapons.item;
 
 import com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons;
-
 import javax.annotation.Nullable;
 import java.util.HashSet;
 import java.util.Set;
@@ -14,9 +13,10 @@ public class CustomItemManager {
         this.plugin = plugin;
 
         registerHandler(new KatsStick(plugin));
+        registerHandler(new TelekinesisSword(plugin));
     }
 
-    public void registerHandler(Item handler) {
+    private void registerHandler(Item handler) {
         itemRegistry.add(handler);
         plugin.registerEvents(handler);
     }
