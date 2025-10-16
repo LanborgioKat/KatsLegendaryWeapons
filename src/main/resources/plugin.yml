@@ -1,0 +1,4 @@
+name: KatsLegendaryWeapons
+version: '${version}'
+main: com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons
+api-version: '1.21'
