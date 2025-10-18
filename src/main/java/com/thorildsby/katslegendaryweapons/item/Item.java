@@ -3,6 +3,7 @@ package com.thorildsby.katslegendaryweapons.item;
 import com.thorildsby.katslegendaryweapons.CooldownTracker;
 import static com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons.COOLDOWN_TRACKER;
 import static com.thorildsby.katslegendaryweapons.Util.strForm;
+import com.thorildsby.katslegendaryweapons.event.JumpEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
@@ -38,6 +39,10 @@ public abstract class Item implements Listener {
 
     protected final boolean isApplicable(EntityEvent event) {
         return event.getEntity() instanceof Player player && isApplicable(player.getInventory().getItemInMainHand());
+    }
+
+    protected final boolean isApplicable(JumpEvent event) {
+        return isApplicable(event.getPlayer().getInventory().getItemInMainHand());
     }
 
     protected final void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {

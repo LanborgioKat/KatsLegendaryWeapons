@@ -21,6 +21,7 @@ public class CooldownTracker {
             case TELEKINESIS_LEVITATE -> cooldowns.get(player).TELEKINESIS_LEVITATE > 0;
             case FLOW_FLOW -> cooldowns.get(player).FLOW_FLOW > 0;
             case FLOW_SHAMBLES -> cooldowns.get(player).FLOW_SHAMBLES > 0;
+            case AIR_DOUBLE_JUMP -> cooldowns.get(player).AIR_DOUBLE_JUMP > 0;
         };
         return false;
     }
@@ -31,6 +32,7 @@ public class CooldownTracker {
             case TELEKINESIS_LEVITATE -> cooldowns.get(player).TELEKINESIS_LEVITATE;
             case FLOW_FLOW -> cooldowns.get(player).FLOW_FLOW;
             case FLOW_SHAMBLES -> cooldowns.get(player).FLOW_SHAMBLES;
+            case AIR_DOUBLE_JUMP -> cooldowns.get(player).AIR_DOUBLE_JUMP;
         };
         return -1;
     }
@@ -44,6 +46,7 @@ public class CooldownTracker {
             case TELEKINESIS_LEVITATE -> cooldown.TELEKINESIS_LEVITATE = ticks;
             case FLOW_FLOW -> cooldown.FLOW_FLOW = ticks;
             case FLOW_SHAMBLES -> cooldown.FLOW_SHAMBLES = ticks;
+            case AIR_DOUBLE_JUMP -> cooldown.AIR_DOUBLE_JUMP = ticks;
         }
 
         cooldowns.put(player, cooldown);
@@ -57,6 +60,7 @@ public class CooldownTracker {
             cooldown.TELEKINESIS_LEVITATE = 0;
             cooldown.FLOW_FLOW = 0;
             cooldown.FLOW_SHAMBLES = 0;
+            cooldown.AIR_DOUBLE_JUMP = 0;
 
             cooldowns.put(player, cooldown);
         }
@@ -71,6 +75,7 @@ public class CooldownTracker {
         public int TELEKINESIS_LEVITATE = 0;
         public int FLOW_FLOW = 0;
         public int FLOW_SHAMBLES = 0;
+        public int AIR_DOUBLE_JUMP = 0;
 
         void negateAll(Player player) {
             boolean flag = false;
@@ -106,6 +111,13 @@ public class CooldownTracker {
                         new TextComponent(strForm("*eYour Flow Sword's shambles cooldown has expired!")));
                 }
             }
+            if (AIR_DOUBLE_JUMP > 0) {
+                AIR_DOUBLE_JUMP --;
+                if (player.isOnline() && AIR_DOUBLE_JUMP <= 0) {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                        new TextComponent(strForm("*eYour Air Sword's double jump cooldown has expired!")));
+                }
+            }
 
             if (flag && player.isOnline()) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
         }
@@ -115,6 +127,7 @@ public class CooldownTracker {
         TELEKINESIS_TELEPORT,
         TELEKINESIS_LEVITATE,
         FLOW_FLOW,
-        FLOW_SHAMBLES
+        FLOW_SHAMBLES,
+        AIR_DOUBLE_JUMP
     }
 }
