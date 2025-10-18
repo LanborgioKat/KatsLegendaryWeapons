@@ -56,9 +56,7 @@ public final class KatsLegendaryWeapons extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
-        // Plugin shutdown logic
-    }
+    public void onDisable() {}
 
     public void registerEvents(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);

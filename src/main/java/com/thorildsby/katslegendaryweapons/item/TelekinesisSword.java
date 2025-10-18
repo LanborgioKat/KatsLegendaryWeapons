@@ -34,6 +34,9 @@ public class TelekinesisSword extends Item {
         meta.setDisplayName(strForm("*dTelekinesis Sword"));
 
         ArrayList<String> description = new ArrayList<>();
+        description.add(strForm("*ePassive: Holder doesn't take fall damage"));
+        description.add(strForm("*5Teleport: Teleport five blocks forward (45s CD)"));
+        description.add(strForm("*5Levitate: Levitate the closest player for ten seconds (5min CD)"));
         description.add(strForm("*7*oID: TELEKINESIS_SWORD"));
         meta.setLore(description);
 

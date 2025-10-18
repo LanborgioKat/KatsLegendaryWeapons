@@ -31,6 +31,9 @@ public class FlowSword extends Item {
         meta.setDisplayName(strForm("*dFlow Sword"));
 
         ArrayList<String> description = new ArrayList<>();
+        description.add(strForm("*ePassive: Holder has the Conduit Power effect"));
+        description.add(strForm("*5Flow: Gain some positive effects for 30 seconds (5min CD)"));
+        description.add(strForm("*5Shambles: Clear all effects from the nearest player (5min CD)"));
         description.add(strForm("*7*oID: FLOW_SWORD"));
         meta.setLore(description);
 

@@ -31,9 +31,7 @@ public class LegendariesCommand implements CommandExecutor {
     }
 
     public static class TabCompleter implements org.bukkit.command.TabCompleter {
-
-        @Nullable
-        @Override
+        @Nullable @Override
         public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
             var result =  ITEM_MANAGER.getItemIDs();
             result.add("*");

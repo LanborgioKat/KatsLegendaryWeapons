@@ -23,6 +23,7 @@ public class KatsStick extends Item {
         meta.setDisplayName(strForm("*eKat's Stick"));
 
         ArrayList<String> description = new ArrayList<>();
+        description.add(strForm("*a*lTHIS ITEM IS FOR DEBUG PURPOSES AND SHOULD NEVER BE GIVEN TO A PLAYER!"));
         description.add(strForm("*d*oID: KATS_STICK"));
         meta.setLore(description);
 

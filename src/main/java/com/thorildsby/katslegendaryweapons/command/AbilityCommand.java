@@ -9,7 +9,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +27,7 @@ public class AbilityCommand implements CommandExecutor {
     }
 
     public static class TabCompleter implements org.bukkit.command.TabCompleter {
-        @Nullable
-        @Override
+        @Nullable @Override
         public List<String> onTabComplete(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
             ArrayList<String> result = new ArrayList<>();
             result.add("1");
