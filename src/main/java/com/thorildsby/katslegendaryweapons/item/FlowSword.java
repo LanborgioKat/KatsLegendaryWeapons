@@ -33,7 +33,7 @@ public class FlowSword extends Item {
         ArrayList<String> description = new ArrayList<>();
         description.add(strForm("*ePassive: Holder has the Conduit Power effect"));
         description.add(strForm("*5Flow: Gain some positive effects for 30 seconds (5min CD)"));
-        description.add(strForm("*5Shambles: Clear all effects from the nearest player (5min CD)"));
+        description.add(strForm("*5Shambles: Clear all effects from the nearest player (8min CD)"));
         description.add(strForm("*7*oID: FLOW_SWORD"));
         meta.setLore(description);
 
@@ -92,7 +92,7 @@ public class FlowSword extends Item {
             }
 
             player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 1f, 1f);
-            COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.FLOW_SHAMBLES, t5min);
+            COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.FLOW_SHAMBLES, t8min);
         }
         else noAbilityMessage(player, CooldownType.FLOW_SHAMBLES);
     }

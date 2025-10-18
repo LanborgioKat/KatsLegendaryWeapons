@@ -16,6 +16,7 @@ public class CustomItemManager {
         registerHandler(new KatsStick(plugin));
         registerHandler(new TelekinesisSword(plugin));
         registerHandler(new FlowSword(plugin));
+        registerHandler(new AirSword(plugin));
     }
 
     private void registerHandler(Item handler) {

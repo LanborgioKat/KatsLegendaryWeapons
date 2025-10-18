@@ -13,6 +13,7 @@ public class Util {
 
     //Minutes
     public static final int t5min = 5*60*20;
+    public static final int t8min = 8*60*20;
     public static final int t15min = 15*60*20;
 
     public static String strForm(String s) {
