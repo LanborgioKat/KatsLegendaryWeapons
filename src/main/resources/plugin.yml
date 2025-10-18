@@ -7,3 +7,10 @@ commands:
     description: Gives you a legendary item
     usage: /legendaries <id>
     permission: op
+  ability:
+    description: Activates an ability
+    usage: /ability <int>
+  clearCooldown:
+    description: Clears all of your cooldowns
+    usage: /clearCooldown
+    permission: op

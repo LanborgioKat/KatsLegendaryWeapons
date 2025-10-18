@@ -1,7 +1,8 @@
 package com.thorildsby.katslegendaryweapons.item;
 
 import com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons;
-import javax.annotation.Nullable;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,6 +15,7 @@ public class CustomItemManager {
 
         registerHandler(new KatsStick(plugin));
         registerHandler(new TelekinesisSword(plugin));
+        registerHandler(new FlowSword(plugin));
     }
 
     private void registerHandler(Item handler) {
@@ -21,15 +23,14 @@ public class CustomItemManager {
         plugin.registerEvents(handler);
     }
 
-    @Nullable
-    public <T> T getHandler(Class<? extends T> clazz) {
-        for (Item handler : itemRegistry) if (handler.getClass().equals(clazz)) //noinspection unchecked
-            return (T) handler;
-        return null;
-    }
-
     public Item getHandler(String itemID) {
         for (Item handler : itemRegistry) if (handler.itemID.equals(itemID)) return handler;
         return null;
+    }
+
+    public ArrayList<String> getItemIDs() {
+        ArrayList<String> result = new ArrayList<>();
+        for (var item : itemRegistry) result.add(item.itemID);
+        return result;
     }
 }

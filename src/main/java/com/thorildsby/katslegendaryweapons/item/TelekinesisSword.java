@@ -3,19 +3,16 @@ package com.thorildsby.katslegendaryweapons.item;
 import com.thorildsby.katslegendaryweapons.CooldownTracker.CooldownType;
 import static com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons.COOLDOWN_TRACKER;
 import static com.thorildsby.katslegendaryweapons.Util.*;
+import com.thorildsby.katslegendaryweapons.event.WeaponAbilityOneEvent;
+import com.thorildsby.katslegendaryweapons.event.WeaponAbilityTwoEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -46,18 +43,13 @@ public class TelekinesisSword extends Item {
         return itemStack;
     }
 
+    //TODO: make better
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
+    public void abilityOne(WeaponAbilityOneEvent event) {
         if (!isApplicable(event)) return;
+        var player = event.getPlayer();
 
-        Action action = event.getAction();
-        if (!(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK)) return;
-
-        Player player = event.getPlayer();
-
-        //TODO: make smoother
-        //Ability 1
-        if (!player.isSneaking() && !COOLDOWN_TRACKER.isCooldownActive(player, CooldownType.TELEKINESIS_TELEPORT)) {
+        if (!COOLDOWN_TRACKER.isCooldownActive(player, CooldownType.TELEKINESIS_TELEPORT)) {
             Vector direction = player.getLocation().getDirection().multiply(5f);
             Location destination = player.getLocation().add(direction).add(0, 0.5f, 0);
 
@@ -70,22 +62,18 @@ public class TelekinesisSword extends Item {
             player.teleport(destination);
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_TELEPORT, 1f, 1f);
 
-            COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.TELEKINESIS_TELEPORT, t3min);
+            COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.TELEKINESIS_TELEPORT, t45s);
         }
-        //Ability 2
-        else if (!COOLDOWN_TRACKER.isCooldownActive(player, CooldownType.TELEKINESIS_LEVITATE)) {
-            var candidates = player.getNearbyEntities(10, 10, 10);
+        else noAbilityMessage(player, CooldownType.TELEKINESIS_TELEPORT);
+    }
 
-            Entity closest = null;
-            double closestDistance = 100d;
-            for (var candidate : candidates) {
-                if (candidate.getType() != EntityType.PLAYER) continue;
-                double distance = player.getLocation().distance(candidate.getLocation());
-                if (distance < closestDistance) {
-                    closest = candidate;
-                    closestDistance = distance;
-                }
-            }
+    @EventHandler
+    public void abilityTwo(WeaponAbilityTwoEvent event) {
+        if (!isApplicable(event)) return;
+        var player = event.getPlayer();
+
+        if (!COOLDOWN_TRACKER.isCooldownActive(player, CooldownType.TELEKINESIS_LEVITATE)) {
+            Player closest = getClosestPlayer(player, 10);
 
             if (closest == null) {
                 player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
@@ -94,9 +82,10 @@ public class TelekinesisSword extends Item {
                 return;
             }
 
-            new PotionEffect(PotionEffectType.LEVITATION, t10s, 0).apply((LivingEntity) closest);
-            COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.TELEKINESIS_LEVITATE, t10min);
+            new PotionEffect(PotionEffectType.LEVITATION, t10s, 0).apply(closest);
+            COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.TELEKINESIS_LEVITATE, t5min);
         }
+        else noAbilityMessage(player, CooldownType.TELEKINESIS_LEVITATE);
     }
 
     @EventHandler

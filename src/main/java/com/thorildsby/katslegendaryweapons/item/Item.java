@@ -1,13 +1,18 @@
 package com.thorildsby.katslegendaryweapons.item;
 
+import com.thorildsby.katslegendaryweapons.CooldownTracker;
+import static com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons.COOLDOWN_TRACKER;
+import static com.thorildsby.katslegendaryweapons.Util.strForm;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -27,15 +32,21 @@ public abstract class Item implements Listener {
         this.material = material;
     }
 
-    protected boolean isApplicable(PlayerEvent event) {
+    protected final boolean isApplicable(PlayerEvent event) {
         return isApplicable(event.getPlayer().getInventory().getItemInMainHand());
     }
 
-    protected boolean isApplicable(EntityEvent event) {
+    protected final boolean isApplicable(EntityEvent event) {
         return event.getEntity() instanceof Player player && isApplicable(player.getInventory().getItemInMainHand());
     }
 
-    public boolean isApplicable(@NotNull ItemStack itemStack) {
+    protected final void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+            new TextComponent(strForm("*cThis ability will be available in " + COOLDOWN_TRACKER.getCooldown(player, type)/20 + "s!")));
+        player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BREAK, 1f, 1f);
+    }
+
+    public final boolean isApplicable(@NotNull ItemStack itemStack) {
         if (!itemStack.hasItemMeta()) return false;
 
         ItemMeta meta = itemStack.getItemMeta();

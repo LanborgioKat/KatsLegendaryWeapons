@@ -19,8 +19,20 @@ public class CooldownTracker {
         if (cooldowns.containsKey(player)) return switch (type) {
             case TELEKINESIS_TELEPORT -> cooldowns.get(player).TELEKINESIS_TELEPORT > 0;
             case TELEKINESIS_LEVITATE -> cooldowns.get(player).TELEKINESIS_LEVITATE > 0;
+            case FLOW_FLOW -> cooldowns.get(player).FLOW_FLOW > 0;
+            case FLOW_SHAMBLES -> cooldowns.get(player).FLOW_SHAMBLES > 0;
         };
         return false;
+    }
+
+    public int getCooldown(Player player, CooldownType type) {
+        if (cooldowns.containsKey(player)) return switch (type) {
+            case TELEKINESIS_TELEPORT -> cooldowns.get(player).TELEKINESIS_TELEPORT;
+            case TELEKINESIS_LEVITATE -> cooldowns.get(player).TELEKINESIS_LEVITATE;
+            case FLOW_FLOW -> cooldowns.get(player).FLOW_FLOW;
+            case FLOW_SHAMBLES -> cooldowns.get(player).FLOW_SHAMBLES;
+        };
+        return -1;
     }
 
     public void scheduleCooldown(Player player, CooldownType type, int ticks) {
@@ -30,9 +42,24 @@ public class CooldownTracker {
         switch (type) {
             case TELEKINESIS_TELEPORT -> cooldown.TELEKINESIS_TELEPORT = ticks;
             case TELEKINESIS_LEVITATE -> cooldown.TELEKINESIS_LEVITATE = ticks;
+            case FLOW_FLOW -> cooldown.FLOW_FLOW = ticks;
+            case FLOW_SHAMBLES -> cooldown.FLOW_SHAMBLES = ticks;
         }
 
         cooldowns.put(player, cooldown);
+    }
+
+    public void clearAll(Player player) {
+        if (cooldowns.containsKey(player)) {
+            Cooldown cooldown = cooldowns.get(player);
+
+            cooldown.TELEKINESIS_TELEPORT = 0;
+            cooldown.TELEKINESIS_LEVITATE = 0;
+            cooldown.FLOW_FLOW = 0;
+            cooldown.FLOW_SHAMBLES = 0;
+
+            cooldowns.put(player, cooldown);
+        }
     }
 
     private void manageCooldowns() {
@@ -42,22 +69,42 @@ public class CooldownTracker {
     private static class Cooldown {
         public int TELEKINESIS_TELEPORT = 0;
         public int TELEKINESIS_LEVITATE = 0;
+        public int FLOW_FLOW = 0;
+        public int FLOW_SHAMBLES = 0;
 
         void negateAll(Player player) {
             boolean flag = false;
+            //TODO: refactor
             if (TELEKINESIS_TELEPORT > 0) {
                 TELEKINESIS_TELEPORT--;
-                if (TELEKINESIS_TELEPORT > 0) return;
-                if (player.isOnline()) player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                    new TextComponent(strForm("*eYour Telekinesis Sword's teleport cooldown has expired!")));
-                flag = true;
+                if (player.isOnline() && TELEKINESIS_TELEPORT <= 0) {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                        new TextComponent(strForm("*eYour Telekinesis Sword's teleport cooldown has expired!")));
+                    flag = true;
+                }
             }
             if (TELEKINESIS_LEVITATE > 0) {
                 TELEKINESIS_LEVITATE--;
-                if (TELEKINESIS_LEVITATE > 0) return;
-                if (player.isOnline()) player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-                    new TextComponent(strForm("*eYour Telekinesis Sword's levitation cooldown has expired!")));
-                flag = true;
+                if (player.isOnline() && TELEKINESIS_LEVITATE <= 0) {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                        new TextComponent(strForm("*eYour Telekinesis Sword's levitation cooldown has expired!")));
+                    flag = true;
+                }
+            }
+            if (FLOW_FLOW > 0) {
+                FLOW_FLOW--;
+                if (player.isOnline() && FLOW_FLOW <= 0) {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                        new TextComponent(strForm("*eYour Flow Sword's flow cooldown has expired!")));
+                    flag = true;
+                }
+            }
+            if (FLOW_SHAMBLES > 0) {
+                FLOW_SHAMBLES--;
+                if (player.isOnline() && FLOW_SHAMBLES <= 0) {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                        new TextComponent(strForm("*eYour Flow Sword's shambles cooldown has expired!")));
+                }
             }
 
             if (flag && player.isOnline()) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
@@ -66,6 +113,8 @@ public class CooldownTracker {
 
     public enum CooldownType {
         TELEKINESIS_TELEPORT,
-        TELEKINESIS_LEVITATE
+        TELEKINESIS_LEVITATE,
+        FLOW_FLOW,
+        FLOW_SHAMBLES
     }
 }
