@@ -42,7 +42,7 @@ public final class KatsLegendaryWeapons extends JavaPlugin {
             public void onPacketReceiving(PacketEvent event) {
                 //Actually goofed up code :sob:, but I won't elaborate
                 String s = event.getPacket().getHandle().toString();
-                //TODO: eliminate ghost inputs
+                //TODO: after releasing space, you have one second to hit space again
                 if (s.contains("jump=true") && !s.contains("left=true") && !s.contains("right=true"))
                     Bukkit.getPluginManager().callEvent(new JumpEvent(event.getPlayer()));
             }

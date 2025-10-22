@@ -45,7 +45,7 @@ public abstract class Item implements Listener {
         return isApplicable(event.getPlayer().getInventory().getItemInMainHand());
     }
 
-    protected final void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
+    protected static void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
             new TextComponent(strForm("*cThis ability will be available in " + COOLDOWN_TRACKER.getCooldown(player, type)/20 + "s!")));
         player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BREAK, 1f, 1f);
