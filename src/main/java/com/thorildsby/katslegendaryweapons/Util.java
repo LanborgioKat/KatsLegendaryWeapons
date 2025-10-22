@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 
 public class Util {
     //Seconds
+    public static final int t1s = tSeconds(1);
     public static final int t5s = tSeconds(5);
     public static final int t10s = tSeconds(10);
     public static final int t30s = tSeconds(30);

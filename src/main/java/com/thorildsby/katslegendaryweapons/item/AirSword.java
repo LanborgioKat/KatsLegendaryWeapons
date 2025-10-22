@@ -6,6 +6,7 @@ import static com.thorildsby.katslegendaryweapons.Util.*;
 import com.thorildsby.katslegendaryweapons.event.AbilityTwoEvent;
 import com.thorildsby.katslegendaryweapons.event.JumpEvent;
 import com.thorildsby.katslegendaryweapons.event.AbilityOneEvent;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -17,12 +18,14 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import static java.lang.Math.*;
 
 public class AirSword extends Item {
-    private final HashSet<Player> fallDamageExempt = new HashSet<>();
+    private final HashSet<LivingEntity> fallDamageExempt = new HashSet<>();
     private final HashSet<Tornado> activeTornados = new HashSet<>();
 
     public AirSword(JavaPlugin plugin) {
@@ -55,8 +58,8 @@ public class AirSword extends Item {
     @EventHandler
     public void onEntityDamage(EntityDamageEvent event) {
         boolean causeCheck = event.getCause() == EntityDamageEvent.DamageCause.FALL;
-        if (event.getEntity() instanceof Player player && fallDamageExempt.contains(player) && causeCheck) {
-            fallDamageExempt.remove(player);
+        if (event.getEntity() instanceof LivingEntity entity && fallDamageExempt.contains(entity) && causeCheck) {
+            fallDamageExempt.remove(entity);
             event.setCancelled(true);
             return;
         }
@@ -120,7 +123,7 @@ public class AirSword extends Item {
         victims.removeIf(victim -> victim.getUniqueId().equals(player.getUniqueId()));
         //TEST victims.removeIf(victim -> victim.getType() != EntityType.PLAYER);
 
-        activeTornados.add(new Tornado(player, victims));
+        new Tornado(player, victims);
         COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.AIR_TORNADO, t10min);
     }
 
@@ -138,10 +141,18 @@ public class AirSword extends Item {
 
         public void tick() {
             timer--;
-
-
-
             if (timer == 0) activeTornados.remove(this);
+            double timerScaled = ((timer - ((double) t5s/2))/20) * 2.5;
+
+            Location target = culprit.getLocation().add(cos(timerScaled)*3, 5, sin(timerScaled)*3);
+
+            for (var victim : victims) {
+                Vector targetVector = target.toVector().subtract(victim.getLocation().toVector()).normalize();
+                victim.setVelocity(targetVector);
+                fallDamageExempt.add(victim);
+
+                if (timer > t1s && timer % t1s == 0) victim.damage(1);
+            }
         }
     }
 }
