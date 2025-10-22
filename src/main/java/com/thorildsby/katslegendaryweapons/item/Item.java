@@ -11,6 +11,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,10 +41,8 @@ public abstract class Item implements Listener {
         return event.getEntity() instanceof Player player && isApplicable(player.getInventory().getItemInMainHand());
     }
 
-    protected final void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-            new TextComponent(strForm("*cThis ability will be available in " + COOLDOWN_TRACKER.getCooldown(player, type)/20 + "s!")));
-        player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BREAK, 1f, 1f);
+    protected final boolean isApplicable(EntityDamageByEntityEvent event) {
+        return event.getDamager() instanceof Player player && isApplicable(player.getInventory().getItemInMainHand());
     }
 
     public final boolean isApplicable(@NotNull ItemStack itemStack) {
@@ -56,6 +55,12 @@ public abstract class Item implements Listener {
 
         String pdcID = pdc.get(new NamespacedKey(plugin, "ITEM_ID"), PersistentDataType.STRING);
         return itemID.equals(pdcID);
+    }
+
+    protected final void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+            new TextComponent(strForm("*cThis ability will be available in " + COOLDOWN_TRACKER.getCooldown(player, type)/20 + "s!")));
+        player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BREAK, 1f, 1f);
     }
 
     public final ItemStack getItem() {

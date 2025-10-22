@@ -7,6 +7,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import java.util.HashMap;
 
+//Ik this class is shit, but it works, so I won't change it
 public class CooldownTracker {
     private final HashMap<Player, Cooldown> cooldowns = new HashMap<>();
 
@@ -21,6 +22,7 @@ public class CooldownTracker {
             case TELEKINESIS_LEVITATE -> cooldowns.get(player).TELEKINESIS_LEVITATE > 0;
             case FLOW_FLOW -> cooldowns.get(player).FLOW_FLOW > 0;
             case FLOW_SHAMBLES -> cooldowns.get(player).FLOW_SHAMBLES > 0;
+            case SHIELD_BREAKER_HALF_DAMAGE -> cooldowns.get(player).SHIELD_BREAKER_HALF_DAMAGE >0;
         };
         return false;
     }
@@ -31,6 +33,7 @@ public class CooldownTracker {
             case TELEKINESIS_LEVITATE -> cooldowns.get(player).TELEKINESIS_LEVITATE;
             case FLOW_FLOW -> cooldowns.get(player).FLOW_FLOW;
             case FLOW_SHAMBLES -> cooldowns.get(player).FLOW_SHAMBLES;
+            case SHIELD_BREAKER_HALF_DAMAGE -> cooldowns.get(player).SHIELD_BREAKER_HALF_DAMAGE;
         };
         return -1;
     }
@@ -44,6 +47,7 @@ public class CooldownTracker {
             case TELEKINESIS_LEVITATE -> cooldown.TELEKINESIS_LEVITATE = ticks;
             case FLOW_FLOW -> cooldown.FLOW_FLOW = ticks;
             case FLOW_SHAMBLES -> cooldown.FLOW_SHAMBLES = ticks;
+            case SHIELD_BREAKER_HALF_DAMAGE -> cooldown.SHIELD_BREAKER_HALF_DAMAGE = ticks;
         }
 
         cooldowns.put(player, cooldown);
@@ -57,6 +61,7 @@ public class CooldownTracker {
             cooldown.TELEKINESIS_LEVITATE = 0;
             cooldown.FLOW_FLOW = 0;
             cooldown.FLOW_SHAMBLES = 0;
+            cooldown.SHIELD_BREAKER_HALF_DAMAGE = 0;
 
             cooldowns.put(player, cooldown);
         }
@@ -71,6 +76,7 @@ public class CooldownTracker {
         public int TELEKINESIS_LEVITATE = 0;
         public int FLOW_FLOW = 0;
         public int FLOW_SHAMBLES = 0;
+        public int SHIELD_BREAKER_HALF_DAMAGE = 0;
 
         void negateAll(Player player) {
             boolean flag = false;
@@ -105,6 +111,15 @@ public class CooldownTracker {
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                         new TextComponent(strForm("*eYour Flow Sword's shambles cooldown has expired!")));
                 }
+                flag = true;
+            }
+            if (SHIELD_BREAKER_HALF_DAMAGE > 0) {
+                SHIELD_BREAKER_HALF_DAMAGE--;
+                if (player.isOnline() && SHIELD_BREAKER_HALF_DAMAGE <= 0) {
+                    player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                        new TextComponent(strForm("*eYour Shield Breaker Axe's cooldown has expired!")));
+                }
+                flag = true;
             }
 
             if (flag && player.isOnline()) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
@@ -115,6 +130,7 @@ public class CooldownTracker {
         TELEKINESIS_TELEPORT,
         TELEKINESIS_LEVITATE,
         FLOW_FLOW,
-        FLOW_SHAMBLES
+        FLOW_SHAMBLES,
+        SHIELD_BREAKER_HALF_DAMAGE
     }
 }

@@ -8,10 +8,12 @@ import org.bukkit.entity.Player;
 public class Util {
     //Seconds
     public static final int t10s = 10*20;
+    public static final int t20s = 20*20;
     public static final int t30s = 30*20;
     public static final int t45s = 45*20;
 
     //Minutes
+    public static final int t1min = 60*20;
     public static final int t5min = 5*60*20;
     public static final int t8min = 8*60*20;
     public static final int t15min = 15*60*20;
