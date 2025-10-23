@@ -15,6 +15,7 @@ public class Util {
     public static final int t45s = tSeconds(45);
 
     //Minutes
+    public static final int t1min = tMinutes(1);
     public static final int t3min = tMinutes(3);
     public static final int t5min = tMinutes(5);
     public static final int t8min = tMinutes(8);
