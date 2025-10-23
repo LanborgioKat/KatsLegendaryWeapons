@@ -10,6 +10,7 @@ public class Util {
     public static final int t1s = tSeconds(1);
     public static final int t5s = tSeconds(5);
     public static final int t10s = tSeconds(10);
+    public static final int t20s = tSeconds(20);
     public static final int t30s = tSeconds(30);
     public static final int t45s = tSeconds(45);
 
