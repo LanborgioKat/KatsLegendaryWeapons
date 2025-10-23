@@ -3,8 +3,8 @@ package com.thorildsby.katslegendaryweapons.item;
 import com.thorildsby.katslegendaryweapons.CooldownTracker.CooldownType;
 import static com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons.COOLDOWN_TRACKER;
 import static com.thorildsby.katslegendaryweapons.Util.*;
-import com.thorildsby.katslegendaryweapons.event.WeaponAbilityOneEvent;
-import com.thorildsby.katslegendaryweapons.event.WeaponAbilityTwoEvent;
+import com.thorildsby.katslegendaryweapons.event.AbilityOneEvent;
+import com.thorildsby.katslegendaryweapons.event.AbilityTwoEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
@@ -56,7 +56,7 @@ public class FlowSword extends Item {
     }
 
     @EventHandler
-    public void abilityOne(WeaponAbilityOneEvent event) {
+    public void abilityOne(AbilityOneEvent event) {
         if (!isApplicable(event)) return;
         Player player = event.getPlayer();
 
@@ -72,7 +72,7 @@ public class FlowSword extends Item {
     }
 
     @EventHandler
-    public void abilityTwo(WeaponAbilityTwoEvent event) {
+    public void abilityTwo(AbilityTwoEvent event) {
         if (!isApplicable(event)) return;
         Player player = event.getPlayer();
 

@@ -5,10 +5,10 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.jetbrains.annotations.NotNull;
 
-public class WeaponAbilityOneEvent extends PlayerEvent {
+public class AbilityTwoEvent extends PlayerEvent {
     private static final HandlerList HANDLERS_LIST = new HandlerList();
 
-    public WeaponAbilityOneEvent(@NotNull Player who) {
+    public AbilityTwoEvent(@NotNull Player who) {
         super(who);
     }
 

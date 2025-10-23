@@ -1,7 +1,7 @@
 package com.thorildsby.katslegendaryweapons.command;
 
-import com.thorildsby.katslegendaryweapons.event.WeaponAbilityOneEvent;
-import com.thorildsby.katslegendaryweapons.event.WeaponAbilityTwoEvent;
+import com.thorildsby.katslegendaryweapons.event.AbilityOneEvent;
+import com.thorildsby.katslegendaryweapons.event.AbilityTwoEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,11 +16,11 @@ public class AbilityCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
         if (args[0].equals("1")) {
-            Bukkit.getPluginManager().callEvent(new WeaponAbilityOneEvent((Player) sender));
+            Bukkit.getPluginManager().callEvent(new AbilityOneEvent((Player) sender));
             return true;
         }
         if (args[0].equals("2")) {
-            Bukkit.getPluginManager().callEvent(new WeaponAbilityTwoEvent((Player) sender));
+            Bukkit.getPluginManager().callEvent(new AbilityTwoEvent((Player) sender));
             return true;
         }
         return false;
