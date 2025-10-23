@@ -97,7 +97,8 @@ public final class KatsLegendaryWeapons extends JavaPlugin {
                     int z = (int) location.getZ();
 
                     //TODO: dimension
-                    Bukkit.broadcastMessage(player.getDisplayName() + " is located at " + x + " " + y + " " + z);
+                    Bukkit.broadcastMessage(player.getDisplayName() + " is located at " + x + " " + y + " " + z +
+                        " in " + player.getWorld().getName());
                 }
             }
         }, t1min, t15min);
