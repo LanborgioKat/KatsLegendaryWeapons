@@ -46,7 +46,7 @@ public class AirSword extends Item {
         description.add(strForm("*bDouble jump: Press your jump key in the air to perform a double jump (30s CD)"));
         description.add(strForm("*5Wind Canon: Launch ten blocks into the direction you are looking (3min CD)"));
         description.add(strForm("*5Tornado: Launches a powerful tornado at nearby players (10min CD)"));
-        description.add(strForm("*7*oID: FLOW_SWORD"));
+        description.add(strForm("*7*oID: AIR_SWORD"));
         meta.setLore(description);
 
         meta.setEnchantmentGlintOverride(true);
