@@ -110,16 +110,16 @@ public class CooldownTracker {
                 if (player.isOnline() && FLOW_SHAMBLES <= 0) {
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                         new TextComponent(strForm("*eYour Flow Sword's shambles cooldown has expired!")));
+                    flag = true;
                 }
-                flag = true;
             }
             if (SHIELD_BREAKER_HALF_DAMAGE > 0) {
                 SHIELD_BREAKER_HALF_DAMAGE--;
                 if (player.isOnline() && SHIELD_BREAKER_HALF_DAMAGE <= 0) {
                     player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                         new TextComponent(strForm("*eYour Shield Breaker Axe's cooldown has expired!")));
+                    flag = true;
                 }
-                flag = true;
             }
 
             if (flag && player.isOnline()) player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
