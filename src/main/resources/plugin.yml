@@ -2,6 +2,8 @@ name: KatsLegendaryWeapons
 version: '${version}'
 main: com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons
 api-version: '1.21'
+depend:
+  - ProtocolLib
 commands:
   legendaries:
     description: Gives you a legendary item

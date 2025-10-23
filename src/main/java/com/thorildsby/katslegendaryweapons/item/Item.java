@@ -3,6 +3,7 @@ package com.thorildsby.katslegendaryweapons.item;
 import com.thorildsby.katslegendaryweapons.CooldownTracker;
 import static com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons.COOLDOWN_TRACKER;
 import static com.thorildsby.katslegendaryweapons.Util.strForm;
+import com.thorildsby.katslegendaryweapons.event.JumpEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
@@ -11,6 +12,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityEvent;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.inventory.ItemStack;
@@ -40,7 +42,15 @@ public abstract class Item implements Listener {
         return event.getEntity() instanceof Player player && isApplicable(player.getInventory().getItemInMainHand());
     }
 
-    protected final void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
+    protected final boolean isApplicable(EntityDamageByEntityEvent event) {
+        return event.getDamager() instanceof Player player && isApplicable(player.getInventory().getItemInMainHand());
+    }
+  
+    protected final boolean isApplicable(JumpEvent event) {
+        return isApplicable(event.getPlayer().getInventory().getItemInMainHand());
+    }
+
+    protected static void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
         player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
             new TextComponent(strForm("*cThis ability will be available in " + COOLDOWN_TRACKER.getCooldown(player, type)/20 + "s!")));
         player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BREAK, 1f, 1f);
@@ -56,6 +66,12 @@ public abstract class Item implements Listener {
 
         String pdcID = pdc.get(new NamespacedKey(plugin, "ITEM_ID"), PersistentDataType.STRING);
         return itemID.equals(pdcID);
+    }
+
+    protected final void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+            new TextComponent(strForm("*cThis ability will be available in " + COOLDOWN_TRACKER.getCooldown(player, type)/20 + "s!")));
+        player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BREAK, 1f, 1f);
     }
 
     public final ItemStack getItem() {
