@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 public class Util {
     //Seconds
-    public static final int t1s = tSeconds(1);
     public static final int t5s = tSeconds(5);
     public static final int t10s = tSeconds(10);
     public static final int t20s = tSeconds(20);
@@ -21,6 +20,8 @@ public class Util {
     public static final int t8min = tMinutes(8);
     public static final int t10min = tMinutes(10);
     public static final int t15min = tMinutes(15);
+
+    public static final double TAU = Math.PI*2;
 
     public static int tSeconds(int n) {
         return n*20;
@@ -71,5 +72,9 @@ public class Util {
         }
 
         return closest;
+    }
+
+    public static double randRange(double min, double max) {
+        return (Math.random() * (max-min)) + min;
     }
 }

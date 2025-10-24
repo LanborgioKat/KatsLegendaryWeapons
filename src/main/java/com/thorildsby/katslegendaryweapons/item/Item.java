@@ -3,12 +3,11 @@ package com.thorildsby.katslegendaryweapons.item;
 import com.thorildsby.katslegendaryweapons.CooldownTracker;
 import static com.thorildsby.katslegendaryweapons.KatsLegendaryWeapons.COOLDOWN_TRACKER;
 import static com.thorildsby.katslegendaryweapons.Util.strForm;
-import com.thorildsby.katslegendaryweapons.event.JumpEvent;
+import com.thorildsby.katslegendaryweapons.event.DoubleJumpEvent;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -46,14 +45,8 @@ public abstract class Item implements Listener {
         return event.getDamager() instanceof Player player && isApplicable(player.getInventory().getItemInMainHand());
     }
   
-    protected final boolean isApplicable(JumpEvent event) {
+    protected final boolean isApplicable(DoubleJumpEvent event) {
         return isApplicable(event.getPlayer().getInventory().getItemInMainHand());
-    }
-
-    protected static void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
-            new TextComponent(strForm("*cThis ability will be available in " + COOLDOWN_TRACKER.getCooldown(player, type)/20 + "s!")));
-        player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BREAK, 1f, 1f);
     }
 
     public final boolean isApplicable(@NotNull ItemStack itemStack) {
@@ -66,6 +59,12 @@ public abstract class Item implements Listener {
 
         String pdcID = pdc.get(new NamespacedKey(plugin, "ITEM_ID"), PersistentDataType.STRING);
         return itemID.equals(pdcID);
+    }
+
+    protected static void noAbilityMessage(Player player, CooldownTracker.CooldownType type) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+            new TextComponent(strForm("*cThis ability will be available in " + COOLDOWN_TRACKER.getCooldown(player, type)/20 + "s!")));
+        player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BREAK, 1f, 1f);
     }
 
     public final ItemStack getItem() {

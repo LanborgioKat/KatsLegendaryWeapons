@@ -10,7 +10,6 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.thorildsby.katslegendaryweapons.command.AbilityCommand;
 import com.thorildsby.katslegendaryweapons.command.CooldownRemoveCommand;
 import com.thorildsby.katslegendaryweapons.command.LegendariesCommand;
-import com.thorildsby.katslegendaryweapons.event.JumpEvent;
 import com.thorildsby.katslegendaryweapons.item.CustomItemManager;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -30,6 +29,7 @@ public final class KatsLegendaryWeapons extends JavaPlugin {
     public static CooldownTracker COOLDOWN_TRACKER;
     public static HashMap<Player, Double> shieldSchedule = new HashMap<>();
     public static ProtocolManager PROTOCOL_MANAGER;
+    private final HashMap<Player, Long> playerJumpTimes = new HashMap<>();
 
     @Override
     public void onEnable() {
@@ -38,17 +38,7 @@ public final class KatsLegendaryWeapons extends JavaPlugin {
         COOLDOWN_TRACKER = new CooldownTracker(this);
         PROTOCOL_MANAGER = ProtocolLibrary.getProtocolManager();
 
-        PROTOCOL_MANAGER.addPacketListener(new PacketAdapter(
-            this, ListenerPriority.NORMAL, PacketType.Play.Client.STEER_VEHICLE) {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                //Actually goofed up code :sob:, but I won't elaborate
-                String s = event.getPacket().getHandle().toString();
-                //TODO: after releasing space, you have one second to hit space again
-                if (s.contains("jump=true") && !s.contains("left=true") && !s.contains("right=true"))
-                    Bukkit.getPluginManager().callEvent(new JumpEvent(event.getPlayer()));
-            }
-        });
+        PROTOCOL_MANAGER.addPacketListener(new JumpPacketAdapter());
 
         Objects.requireNonNull(getCommand("legendaries")).setExecutor(new LegendariesCommand());
         Objects.requireNonNull(getCommand("legendaries")).setTabCompleter(new LegendariesCommand.TabCompleter());
@@ -64,6 +54,7 @@ public final class KatsLegendaryWeapons extends JavaPlugin {
                 player.damage(shieldSchedule.get(player));
                 shieldSchedule.remove(player);
             }
+            shieldSchedule.replaceAll((p, v) -> v + 1);
         }, 0L, 1L);
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, () -> {
@@ -109,5 +100,25 @@ public final class KatsLegendaryWeapons extends JavaPlugin {
 
     public void registerEvents(Listener listener) {
         getServer().getPluginManager().registerEvents(listener, this);
+    }
+
+    private class JumpPacketAdapter extends PacketAdapter {
+        public JumpPacketAdapter() {
+            super(KatsLegendaryWeapons.this, ListenerPriority.NORMAL, PacketType.Play.Client.STEER_VEHICLE);
+        }
+
+        @Override
+        public void onPacketReceiving(PacketEvent event) {
+            //Actually goofed up code :sob:, but I won't elaborate
+            String s = event.getPacket().getHandle().toString();
+            //TODO: rahhhhhhhhhh
+            /*if (s.contains("jump=true")) {
+                Player player = event.getPlayer();
+                var time = playerJumpTimes.get(player);
+                if (time != null && time < t1s) Bukkit.getPluginManager().callEvent(new DoubleJumpEvent(player));
+
+                playerJumpTimes.put(player, 0L);
+            }*/
+        }
     }
 }

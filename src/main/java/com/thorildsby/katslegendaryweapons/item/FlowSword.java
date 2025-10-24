@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -56,19 +57,27 @@ public class FlowSword extends Item {
     }
 
     @EventHandler
+    public void onPlayerDrop(PlayerDropItemEvent event) {
+        if (!isApplicable(event.getItemDrop().getItemStack())) return;
+        event.getPlayer().removePotionEffect(PotionEffectType.CONDUIT_POWER);
+    }
+
+    @EventHandler
     public void abilityOne(AbilityOneEvent event) {
         if (!isApplicable(event)) return;
         Player player = event.getPlayer();
 
-        if (!COOLDOWN_TRACKER.isCooldownActive(player, CooldownType.FLOW_FLOW)) {
-            new PotionEffect(PotionEffectType.SATURATION, t30s, 0).apply(player);
-            new PotionEffect(PotionEffectType.SPEED, t30s, 1).apply(player);
-            new PotionEffect(PotionEffectType.JUMP_BOOST, t30s, 0).apply(player);
-
-            player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE,1f, 1f);
-            COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.FLOW_FLOW, t5min);
+        if (COOLDOWN_TRACKER.isCooldownActive(player, CooldownType.FLOW_FLOW)) {
+            noAbilityMessage(player, CooldownType.FLOW_FLOW);
+            return;
         }
-        else noAbilityMessage(player, CooldownType.FLOW_FLOW);
+
+        new PotionEffect(PotionEffectType.SATURATION, t30s, 0).apply(player);
+        new PotionEffect(PotionEffectType.SPEED, t30s, 1).apply(player);
+        new PotionEffect(PotionEffectType.JUMP_BOOST, t30s, 0).apply(player);
+
+        player.playSound(player.getLocation(), Sound.BLOCK_CONDUIT_DEACTIVATE,1f, 1f);
+        COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.FLOW_FLOW, t5min);
     }
 
     @EventHandler
@@ -87,9 +96,7 @@ public class FlowSword extends Item {
             }
 
             var effects = shambled.getActivePotionEffects();
-            for (var effect : effects) {
-                shambled.removePotionEffect(effect.getType());
-            }
+            for (var effect : effects) shambled.removePotionEffect(effect.getType());
 
             player.playSound(player.getLocation(), Sound.BLOCK_GLASS_BREAK, 1f, 1f);
             COOLDOWN_TRACKER.scheduleCooldown(player, CooldownType.FLOW_SHAMBLES, t8min);

@@ -5,11 +5,11 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class JumpEvent extends Event {
+public class DoubleJumpEvent extends Event {
     private static final HandlerList HANDLERS_LIST = new HandlerList();
     protected Player player;
 
-    public JumpEvent(@NotNull Player who) {
+    public DoubleJumpEvent(@NotNull Player who) {
         super(true);
         this.player = who;
     }
